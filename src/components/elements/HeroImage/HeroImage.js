@@ -41,7 +41,6 @@ const HeroImage = () => {
     FirstTenMovies(endpoint);
     setLoading(true);
   }, []);
-
   return (
     <Slider {...settings}>
       {!loading &&

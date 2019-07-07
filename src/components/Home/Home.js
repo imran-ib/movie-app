@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useReducer } from "react";
 import Axios from "axios";
 import "./Home.css";
 import HeroImage from "../elements/HeroImage/HeroImage";
@@ -18,7 +18,7 @@ const Home = () => {
   const [loading, setLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(0);
   const [totalPages, settotalPages] = useState(0);
-  const [searchITerm, setSearchTerm] = useState("");
+  const [searchTerm, setSearchTerm] = useState("");
 
   const fetchData = endpoint => {
     Axios.get(endpoint).then(res => {
@@ -33,11 +33,11 @@ const Home = () => {
   const loadMoreItems = () => {
     let endpoint = "";
     setLoading(true);
-    if (searchITerm === "") {
+    if (searchTerm === "") {
       endpoint = `${API_URL}movie/popular?api_key=${API_KEY}&language=en-US&page=${currentPage +
         1}`;
     } else {
-      endpoint = `${API_URL}search/movie/popular?api_key=${API_KEY}&language=en-US&query=${searchITerm}&page=${currentPage +
+      endpoint = `${API_URL}search/movie/popular?api_key=${API_KEY}&language=en-US&query=${searchTerm}&page=${currentPage +
         1}`;
     }
     fetchData(endpoint);
@@ -46,8 +46,29 @@ const Home = () => {
   useEffect(() => {
     fetchData(endpoint);
     //  FirstTenMovies(endpoint);
+    searchItems();
     setLoading(true);
   }, []);
+
+  const searchItems = searchTerm => {
+    //1. create empty endpoint
+    let endpoint = "";
+    // 2. Clear the component State
+    setMovies([]);
+    // setLoading(true);
+    setSearchTerm("");
+    //3. see if there is search term then fetch the movies
+    if (searchTerm === "") {
+      // if there is no search term fetch popular movies
+      endpoint = `${API_URL}movie/popular?api_key=${API_KEY}&language=en-US&page=1`;
+    } else {
+      // otherwise fetch movies with seatch term queries
+      endpoint = `${API_URL}movie/popular?api_key=${API_KEY}&language=en-US&query=${searchTerm}`;
+    }
+    // call fetchData with endpoint
+    fetchData(endpoint);
+  };
+
   if (loading) return <Spinner />;
 
   return (
@@ -56,11 +77,15 @@ const Home = () => {
         <>
           <Header />
           <HeroImage />
-          <SearchBar />
-          <FourColGrid />
-          <MovieThumb />
+          <SearchBar callBackFunc={searchItems} />
+          <FourColGrid
+            movies={movies}
+            loading={loading}
+            searchItems={searchTerm}
+            clickAble={true}
+          />
           <LoadMoreBtn />
-          <button onClick={loadMoreItems}>LoadMore</button>
+          <button onClick={fetchData}>LoadMore</button>
         </>
       )}
     </div>

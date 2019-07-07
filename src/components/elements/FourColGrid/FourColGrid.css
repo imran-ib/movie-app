@@ -1,6 +1,6 @@
 .rmdb-grid h1 {
-  font-family: 'Abel', sans-serif;
-  font-size:42px;
+  font-family: "Abel", sans-serif;
+  font-size: 42px;
 }
 
 .rmdb-grid-content {
@@ -13,16 +13,14 @@
 .rmdb-grid-element {
   background: #353535;
   max-height: 430px;
-  animation: animateGrid 0.5s;
-  overflow: hidden;
 }
 
 @keyframes animateGrid {
   from {
-      opacity:0;
+    opacity: 0;
   }
   to {
-      opacity:1;
+    opacity: 1;
   }
 }
 
@@ -31,11 +29,28 @@
     grid-template-columns: auto auto;
   }
 
-  .rmdb-grid-element:nth-child(2n+2) {
+  .rmdb-grid-element:nth-child(2n + 2) {
     margin-right: 0;
   }
 
   .rmdb-grid h1 {
-    font-size:22px;
+    font-size: 22px;
   }
+}
+
+.custom-class {
+  background: #353535;
+  display: flex;
+  justify-content: center;
+  align-content: center;
+}
+
+.custom-class p {
+  color: aliceblue;
+  text-align: center;
+}
+.custom-container {
+  max-width: 100vw !important;
+  border: 30px solid #ffffff;
+  z-index: 0;
 }
